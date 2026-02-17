@@ -1,0 +1,241 @@
+/* Farm Management System Murunkan - Global Styles */
+/* Inspired by Department of Agriculture Sri Lanka (doa.gov.lk) */
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.35s ease-out;
+}
+
+/* DOA-inspired 3D pill button */
+.btn-gov {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: #fff;
+  background: #008922;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 4px 0 #006b1a, 0 6px 12px rgba(0,107,26,0.25);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+.btn-gov:hover {
+  background: #007a1e;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #006b1a, 0 8px 16px rgba(0,107,26,0.3);
+}
+.btn-gov:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #006b1a, 0 3px 6px rgba(0,107,26,0.2);
+}
+.btn-gov:disabled {
+  background: #94a3b8;
+  box-shadow: 0 4px 0 #64748b;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-gov-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: #008922;
+  background: #fff;
+  border: 2px solid #008922;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.025em;
+}
+.btn-gov-outline:hover {
+  background: #e6f7eb;
+}
+
+.dark .btn-gov-outline {
+  color: #5ac87a;
+  background: transparent;
+  border-color: #5ac87a;
+}
+.dark .btn-gov-outline:hover {
+  background: rgba(90,200,122,0.1);
+}
+
+/* Government-style card */
+.card-gov {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+.card-gov:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.dark .card-gov {
+  background: #1e293b;
+  border-color: #334155;
+}
+.dark .card-gov:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* GOV table */
+.table-gov {
+  width: 100%;
+  text-align: left;
+  font-size: 0.8125rem;
+}
+.table-gov thead {
+  background: #f1f5f0;
+  border-bottom: 2px solid #008922;
+}
+.dark .table-gov thead {
+  background: #1a2e1a;
+  border-bottom-color: #33ba5b;
+}
+.table-gov thead th {
+  padding: 0.875rem 1.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #008922;
+}
+.dark .table-gov thead th {
+  color: #8dd9a3;
+}
+.table-gov tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s;
+}
+.dark .table-gov tbody tr {
+  border-bottom-color: #334155;
+}
+.table-gov tbody tr:hover {
+  background: #f8faf8;
+}
+.dark .table-gov tbody tr:hover {
+  background: rgba(0,137,34,0.05);
+}
+.table-gov tbody td {
+  padding: 0.75rem 1.25rem;
+}
+
+/* Gov form input */
+.input-gov {
+  width: 100%;
+  padding: 0.6875rem 1rem;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.875rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #1e293b;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.input-gov:focus {
+  border-color: #008922;
+  box-shadow: 0 0 0 3px rgba(0,137,34,0.12);
+}
+.dark .input-gov {
+  background: #1e293b;
+  border-color: #475569;
+  color: #f1f5f9;
+}
+.dark .input-gov:focus {
+  border-color: #33ba5b;
+  box-shadow: 0 0 0 3px rgba(51,186,91,0.15);
+}
+
+/* Gov label */
+.label-gov {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #008922;
+}
+.dark .label-gov {
+  color: #8dd9a3;
+}
+
+/* Green top accent for header */
+.gov-header-accent {
+  background: linear-gradient(135deg, #008922 0%, #006b1a 50%, #004010 100%);
+}
+
+/* Sri Lanka emblem watermark */
+.gov-watermark {
+  position: absolute;
+  right: -30px;
+  top: -20px;
+  width: 140px;
+  height: 140px;
+  opacity: 0.04;
+  pointer-events: none;
+}

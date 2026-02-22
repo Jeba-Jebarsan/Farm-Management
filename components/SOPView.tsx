@@ -86,7 +86,7 @@ const SOPView: React.FC<Props> = ({ data, onRestore, isAdmin }) => {
           </p>
           <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 relative z-10">
             <span>Storage: Supabase Cloud</span>
-            <span className="text-blue-500">Status: Secure</span>
+            <span className="text-blue-500">Status: Secure.</span>
           </div>
         </div>
       </div>

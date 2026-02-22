@@ -14,7 +14,8 @@ CREATE TABLE vehicles (
   engine_no TEXT NOT NULL,
   chassis_no TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'Active',
-  joined_date TEXT NOT NULL
+  joined_date TEXT NOT NULL,
+  renewal_date TEXT NOT NULL DEFAULT ''  -- License/Insurance renewal date
 );
 
 -- ============================================
@@ -265,3 +266,46 @@ CREATE POLICY "Allow read access to daily_vehicle_logs" ON daily_vehicle_logs FO
 CREATE POLICY "Allow write access to daily_vehicle_logs" ON daily_vehicle_logs FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Allow update access to daily_vehicle_logs" ON daily_vehicle_logs FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Allow delete access to daily_vehicle_logs" ON daily_vehicle_logs FOR DELETE USING (auth.role() = 'authenticated');
+
+-- ============================================
+-- 17. INVENTORY ITEMS TABLE
+-- ============================================
+CREATE TABLE inventory_items (
+  id TEXT PRIMARY KEY,
+  item_name TEXT NOT NULL,
+  inventory_number TEXT NOT NULL UNIQUE,
+  date_of_purchase TEXT NOT NULL,
+  value REAL NOT NULL DEFAULT 0,
+  revaluation_rate REAL NOT NULL DEFAULT 0,
+  location TEXT NOT NULL DEFAULT '',
+  status TEXT NOT NULL DEFAULT 'Active',
+  custody TEXT NOT NULL DEFAULT '',
+  disposal TEXT NOT NULL DEFAULT '',
+  category TEXT NOT NULL DEFAULT 'Equipment'
+);
+
+ALTER TABLE inventory_items ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow read access to inventory_items" ON inventory_items FOR SELECT USING (true);
+CREATE POLICY "Allow write access to inventory_items" ON inventory_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Allow update access to inventory_items" ON inventory_items FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Allow delete access to inventory_items" ON inventory_items FOR DELETE USING (auth.role() = 'authenticated');
+
+-- ============================================
+-- 18. CROPPING ACTIVITIES TABLE
+-- ============================================
+CREATE TABLE cropping_activities (
+  id TEXT PRIMARY KEY,
+  season TEXT NOT NULL,              -- 'Maha' or 'Yala'
+  month TEXT NOT NULL,
+  crop TEXT NOT NULL,
+  activity TEXT NOT NULL,
+  notes TEXT NOT NULL DEFAULT ''
+);
+
+ALTER TABLE cropping_activities ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow read access to cropping_activities" ON cropping_activities FOR SELECT USING (true);
+CREATE POLICY "Allow write access to cropping_activities" ON cropping_activities FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Allow update access to cropping_activities" ON cropping_activities FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Allow delete access to cropping_activities" ON cropping_activities FOR DELETE USING (auth.role() = 'authenticated');

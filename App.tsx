@@ -3,9 +3,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   LayoutDashboard, Truck, BarChart3, ClipboardCheck, Bell,
   User, LogOut, ShieldAlert, Loader2, Package, Users,
-  Moon, Sun, Tractor, Leaf, Globe, ChevronRight
+  Moon, Sun, Tractor, Leaf, Globe, ChevronRight, Calendar, Archive
 } from 'lucide-react';
-import { FleetState, Role, Vehicle, FuelLog, MaintenanceLog, StockItem, StockIn, StockOut, Employee, LeaveRecord, OvertimeRecord, DailyVehicleLog } from './types';
+import { FleetState, Role, Vehicle, FuelLog, MaintenanceLog, StockItem, StockIn, StockOut, Employee, LeaveRecord, OvertimeRecord, DailyVehicleLog, InventoryItem, CroppingActivity } from './types';
 import { INITIAL_STATE, NAVIGATION_ITEMS } from './constants';
 import {
   fetchAllData,
@@ -19,6 +19,8 @@ import {
   addLeaveRecord, updateLeaveRecord, deleteLeaveRecord,
   addOvertimeRecord, updateOvertimeRecord, deleteOvertimeRecord,
   addDailyVehicleLog, updateDailyVehicleLog, deleteDailyVehicleLog,
+  addInventoryItem, updateInventoryItem, deleteInventoryItem,
+  addCroppingActivity, updateCroppingActivity, deleteCroppingActivity,
   restoreAllData,
 } from './lib/database';
 import { signIn, signOut, getSession, onAuthStateChange } from './lib/supabase';
@@ -29,9 +31,11 @@ import AlertsView from './components/AlertsView';
 import StoreStockView from './components/StoreStockView';
 import HRManagementView from './components/HRManagementView';
 import VehicleMaintenanceView from './components/VehicleMaintenanceView';
+import CroppingCalendarView from './components/CroppingCalendarView';
+import InventoryView from './components/InventoryView';
 
 const ICON_MAP: Record<string, React.FC<any>> = {
-  LayoutDashboard, Truck, BarChart3, ClipboardCheck, Bell, Package, Users
+  LayoutDashboard, Truck, BarChart3, ClipboardCheck, Bell, Package, Users, Calendar, Archive
 };
 
 const App: React.FC = () => {
@@ -179,6 +183,8 @@ const App: React.FC = () => {
   const dailyLogHandlers = makeLogHandlers('dailyVehicleLogs', addDailyVehicleLog, updateDailyVehicleLog, deleteDailyVehicleLog);
   const fuelLogHandlers = makeLogHandlers('fuelLogs', addFuelLog, updateFuelLog, deleteFuelLog);
   const maintLogHandlers = makeLogHandlers('maintenanceLogs', addMaintenanceLog, updateMaintenanceLog, deleteMaintenanceLog);
+  const inventoryHandlers = makeLogHandlers('inventoryItems', addInventoryItem, updateInventoryItem, deleteInventoryItem);
+  const croppingHandlers = makeLogHandlers('croppingActivities', addCroppingActivity, updateCroppingActivity, deleteCroppingActivity);
 
   const handleRestore = async (data: FleetState) => {
     await restoreAllData(data);
@@ -239,6 +245,24 @@ const App: React.FC = () => {
           isAdmin={isAdmin}
         />
       );
+      case 'Cropping Calendar': return (
+        <CroppingCalendarView
+          data={fleetData.croppingActivities}
+          onAdd={croppingHandlers.onAdd}
+          onUpdate={croppingHandlers.onUpdate}
+          onDelete={croppingHandlers.onDelete}
+          isAdmin={isAdmin}
+        />
+      );
+      case 'Inventory': return (
+        <InventoryView
+          data={fleetData.inventoryItems}
+          onAdd={inventoryHandlers.onAdd}
+          onUpdate={inventoryHandlers.onUpdate}
+          onDelete={inventoryHandlers.onDelete}
+          isAdmin={isAdmin}
+        />
+      );
       case 'Alerts': return (
         <div className="relative">
           <div className="blur-sm pointer-events-none select-none opacity-50">
@@ -287,7 +311,7 @@ const App: React.FC = () => {
           <div className="w-20 h-20 rounded-full bg-brand-50 dark:bg-brand-900/30 flex items-center justify-center mx-auto mb-6">
             <Leaf className="text-brand-500 animate-spin" size={32} />
           </div>
-          <p className="text-slate-800 dark:text-slate-200 font-heading font-bold text-lg">Farm Management System</p>
+          <p className="text-slate-800 dark:text-slate-200 font-heading font-bold text-lg">Government Seed Production Farm</p>
           <p className="text-xs text-slate-400 mt-1 font-body">Murunkan - Connecting to database...</p>
         </div>
       </div>
@@ -324,13 +348,23 @@ const App: React.FC = () => {
         {/* Government-style header banner */}
         <div className="p-6 pb-5 relative">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <img
+              src="/logo.jpg"
+              alt="Department of Agriculture Logo"
+              className="w-full h-16 object-contain"
+              onError={(e) => {
+                // Fallback to icon if image not found
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+            <div className="hidden w-11 h-11 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <Tractor className="text-green-300" size={22} />
             </div>
-            <div>
-              <h1 className="text-base font-heading font-extrabold tracking-tight leading-tight text-white">Farm Management</h1>
-              <p className="text-[10px] text-green-300/80 uppercase tracking-[0.2em] font-heading font-semibold">System - Murunkan</p>
-            </div>
+          </div>
+          <div className="mt-3">
+            <h1 className="text-base font-heading font-extrabold tracking-tight leading-tight text-white">Government Seed Production Farm</h1>
+            <p className="text-[10px] text-green-300/80 uppercase tracking-[0.2em] font-heading font-semibold">Murunkan</p>
           </div>
           <div className="mt-3 pt-3 border-t border-white/10">
             <div className="flex items-center space-x-2">
@@ -490,7 +524,7 @@ const App: React.FC = () => {
             <h1 className="text-xl font-heading font-extrabold text-slate-800 dark:text-white tracking-tight">{activeTab}</h1>
             <div className="flex items-center space-x-2 mt-1">
               <div className="w-1.5 h-1.5 rounded-full bg-brand-500"></div>
-              <p className="text-[11px] text-slate-400 font-heading font-medium tracking-wide">Farm Management System - Murunkan</p>
+              <p className="text-[11px] text-slate-400 font-heading font-medium tracking-wide">Government Seed Production Farm - Murunkan</p>
             </div>
           </div>
           <div className="flex items-center space-x-5">
@@ -521,7 +555,7 @@ const App: React.FC = () => {
         {/* Footer */}
         <footer className="border-t border-slate-200 dark:border-slate-800 px-8 py-4 text-center">
           <p className="text-[10px] text-slate-400 dark:text-slate-600 font-heading font-medium tracking-wide">
-            Farm Management System Murunkan &copy; {new Date().getFullYear()} | Northern Province, Sri Lanka
+            Government Seed Production Farm - Murunkan &copy; {new Date().getFullYear()} | Northern Province, Sri Lanka
           </p>
         </footer>
       </main>

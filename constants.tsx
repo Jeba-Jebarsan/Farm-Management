@@ -13,14 +13,18 @@ export const INITIAL_STATE: FleetState = {
   employees: [],
   leaveRecords: [],
   overtimeRecords: [],
-  dailyVehicleLogs: []
+  dailyVehicleLogs: [],
+  inventoryItems: [],
+  croppingActivities: []
 };
 
 export const NAVIGATION_ITEMS = [
   { label: 'Dashboard', icon: 'LayoutDashboard' },
-  { label: 'Vehicle Maint.', icon: 'Truck' },
-  { label: 'Store & Stock', icon: 'Package' },
   { label: 'HR Management', icon: 'Users' },
+  { label: 'Store & Stock', icon: 'Package' },
+  { label: 'Vehicle Maint.', icon: 'Truck' },
+  { label: 'Cropping Calendar', icon: 'Calendar' },
+  { label: 'Inventory', icon: 'Archive' },
   { label: 'Alerts', icon: 'Bell' },
   { label: 'Reports', icon: 'BarChart3' },
   { label: 'SOP & Backups', icon: 'ClipboardCheck' }

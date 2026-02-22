@@ -40,6 +40,7 @@ const emptyVehicle = (): Vehicle => ({
   chassisNo: '',
   status: VehicleStatus.ACTIVE,
   joinedDate: new Date().toISOString().split('T')[0],
+  renewalDate: '',
 });
 
 const emptyDailyLog = (vehicles: Vehicle[]): DailyVehicleLog => ({
@@ -187,6 +188,16 @@ const VehicleMaintenanceView: React.FC<Props> = ({
                 {Object.values(VehicleStatus).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Joined Date</label>
+              <input type="date" value={vehicleForm.joinedDate} onChange={e => setVehicleForm({...vehicleForm, joinedDate: e.target.value})}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Renewal Date</label>
+              <input type="date" value={vehicleForm.renewalDate} onChange={e => setVehicleForm({...vehicleForm, renewalDate: e.target.value})}
+                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm" />
+            </div>
           </div>
           <div className="flex space-x-3 mt-4">
             <button onClick={() => wrap(async () => isEditing ? await onUpdateVehicle(vehicleForm) : await onAddVehicle(vehicleForm))}
@@ -205,7 +216,7 @@ const VehicleMaintenanceView: React.FC<Props> = ({
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-600">
-                {['Vehicle No', 'Plate No', 'Type', 'Model', 'Year', 'Engine No', 'Status', ...(isAdmin ? ['Actions'] : [])].map(h =>
+                {['Vehicle No', 'Plate No', 'Type', 'Model', 'Year', 'Engine No', 'Status', 'Joined Date', 'Renewal Date', ...(isAdmin ? ['Actions'] : [])].map(h =>
                   <th key={h} className="px-4 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">{h}</th>
                 )}
               </tr>
@@ -226,6 +237,8 @@ const VehicleMaintenanceView: React.FC<Props> = ({
                       'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                     }`}>{v.status}</span>
                   </td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{v.joinedDate}</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{v.renewalDate || '—'}</td>
                   {isAdmin && (
                     <td className="px-4 py-3">
                       <div className="flex space-x-2">

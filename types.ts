@@ -26,6 +26,7 @@ export interface Vehicle {
   chassisNo: string;
   status: VehicleStatus;
   joinedDate: string;
+  renewalDate: string; // License/Insurance renewal date
 }
 
 export interface FuelLog {
@@ -144,6 +145,29 @@ export interface DailyVehicleLog {
   remarks: string;
 }
 
+export interface InventoryItem {
+  id: string;
+  itemName: string;
+  inventoryNumber: string;
+  dateOfPurchase: string;
+  value: number;
+  revaluationRate: number;
+  location: string;
+  status: string;
+  custody: string;
+  disposal: string;
+  category: string;
+}
+
+export interface CroppingActivity {
+  id: string;
+  season: 'Maha' | 'Yala';
+  month: string;
+  crop: string;
+  activity: string;
+  notes: string;
+}
+
 export type Role = 'ADMIN' | 'STAFF';
 
 export interface FleetState {
@@ -159,4 +183,6 @@ export interface FleetState {
   leaveRecords: LeaveRecord[];
   overtimeRecords: OvertimeRecord[];
   dailyVehicleLogs: DailyVehicleLog[];
+  inventoryItems: InventoryItem[];
+  croppingActivities: CroppingActivity[];
 }

@@ -13,6 +13,8 @@ import {
   LeaveRecord,
   OvertimeRecord,
   DailyVehicleLog,
+  InventoryItem,
+  CroppingActivity,
 } from '../types';
 
 // ============================================
@@ -55,6 +57,7 @@ const toSnake = (obj: Record<string, any>): Record<string, any> => {
     kmStart: 'km_start',
     kmEnd: 'km_end',
     fuelUsed: 'fuel_used',
+    renewalDate: 'renewal_date',
   };
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(obj)) {
@@ -99,6 +102,10 @@ const toCamel = (obj: Record<string, any>): Record<string, any> => {
     km_start: 'kmStart',
     km_end: 'kmEnd',
     fuel_used: 'fuelUsed',
+    renewal_date: 'renewalDate',
+    inventory_number: 'inventoryNumber',
+    date_of_purchase: 'dateOfPurchase',
+    revaluation_rate: 'revaluationRate',
   };
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(obj)) {
@@ -130,7 +137,7 @@ export async function fetchAllData(): Promise<FleetState> {
   if (insurance.error) throw insurance.error;
 
   // Stock & HR tables may not exist yet — query separately and fallback to empty
-  const [items, stockIn, stockOut, emps, leaves, overtime, dailyLogs] = await Promise.all([
+  const [items, stockIn, stockOut, emps, leaves, overtime, dailyLogs, inventory, cropping] = await Promise.all([
     supabase.from('item_master').select('*'),
     supabase.from('stock_in').select('*'),
     supabase.from('stock_out').select('*'),
@@ -138,6 +145,8 @@ export async function fetchAllData(): Promise<FleetState> {
     supabase.from('leave_records').select('*'),
     supabase.from('overtime_records').select('*'),
     supabase.from('daily_vehicle_logs').select('*'),
+    supabase.from('inventory_items').select('*'),
+    supabase.from('cropping_activities').select('*'),
   ]);
 
   return {
@@ -153,6 +162,8 @@ export async function fetchAllData(): Promise<FleetState> {
     leaveRecords: leaves.error ? [] : toCamelArray<LeaveRecord>(leaves.data),
     overtimeRecords: overtime.error ? [] : toCamelArray<OvertimeRecord>(overtime.data),
     dailyVehicleLogs: dailyLogs.error ? [] : toCamelArray<DailyVehicleLog>(dailyLogs.data),
+    inventoryItems: inventory.error ? [] : toCamelArray<InventoryItem>(inventory.data),
+    croppingActivities: cropping.error ? [] : toCamelArray<CroppingActivity>(cropping.data),
   };
 }
 
@@ -385,11 +396,51 @@ export async function deleteDailyVehicleLog(id: string) {
 }
 
 // ============================================
+// Inventory Items
+// ============================================
+
+export async function addInventoryItem(item: InventoryItem) {
+  const { error } = await supabase.from('inventory_items').insert(toSnake(item));
+  if (error) throw error;
+}
+
+export async function updateInventoryItem(item: InventoryItem) {
+  const { error } = await supabase.from('inventory_items').update(toSnake(item)).eq('id', item.id);
+  if (error) throw error;
+}
+
+export async function deleteInventoryItem(id: string) {
+  const { error } = await supabase.from('inventory_items').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ============================================
+// Cropping Activities
+// ============================================
+
+export async function addCroppingActivity(activity: CroppingActivity) {
+  const { error } = await supabase.from('cropping_activities').insert(toSnake(activity));
+  if (error) throw error;
+}
+
+export async function updateCroppingActivity(activity: CroppingActivity) {
+  const { error } = await supabase.from('cropping_activities').update(toSnake(activity)).eq('id', activity.id);
+  if (error) throw error;
+}
+
+export async function deleteCroppingActivity(id: string) {
+  const { error } = await supabase.from('cropping_activities').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ============================================
 // Bulk upsert (for restore from backup)
 // ============================================
 
 export async function restoreAllData(data: FleetState): Promise<void> {
   // Delete all existing data first (order matters due to foreign keys)
+  await supabase.from('cropping_activities').delete().neq('id', '');
+  await supabase.from('inventory_items').delete().neq('id', '');
   await supabase.from('daily_vehicle_logs').delete().neq('id', '');
   await supabase.from('overtime_records').delete().neq('id', '');
   await supabase.from('leave_records').delete().neq('id', '');
@@ -450,6 +501,14 @@ export async function restoreAllData(data: FleetState): Promise<void> {
   }
   if (data.dailyVehicleLogs && data.dailyVehicleLogs.length > 0) {
     const { error } = await supabase.from('daily_vehicle_logs').insert(data.dailyVehicleLogs.map(toSnake));
+    if (error) throw error;
+  }
+  if (data.inventoryItems && data.inventoryItems.length > 0) {
+    const { error } = await supabase.from('inventory_items').insert(data.inventoryItems.map(toSnake));
+    if (error) throw error;
+  }
+  if (data.croppingActivities && data.croppingActivities.length > 0) {
+    const { error } = await supabase.from('cropping_activities').insert(data.croppingActivities.map(toSnake));
     if (error) throw error;
   }
 }

@@ -359,17 +359,28 @@ const DashboardView: React.FC<Props> = ({ data, setActiveTab }) => {
       {/* ====== VEHICLE FLEET STATUS ====== */}
       {data.vehicles.length > 0 && (
         <div className="card-gov p-6">
-          <h4 className="font-heading font-bold text-slate-800 dark:text-white flex items-center mb-4 text-sm">
-            <Activity size={14} className="mr-2 text-brand-500" /> Fleet Status
+          <h4 className="font-heading font-bold text-slate-800 dark:text-white flex items-center mb-5 text-base">
+            <Activity size={18} className="mr-2 text-brand-500" /> Fleet Status
           </h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {data.vehicles.map(v => (
-              <div key={v.id} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600 hover:border-brand-300 dark:hover:border-brand-700 transition-colors">
-                <p className="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-heading font-bold">{v.id}</p>
-                <p className="text-[11px] font-heading font-bold text-slate-800 dark:text-white mt-0.5 truncate">{v.makeModel}</p>
-                <div className="mt-2 flex items-center space-x-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${v.status === VehicleStatus.ACTIVE ? 'bg-brand-500' : v.status === VehicleStatus.UNDER_REPAIR ? 'bg-amber-500' : 'bg-red-500'}`}></span>
-                  <span className="text-[8px] text-slate-400 font-heading font-medium uppercase tracking-wider">{v.status}</span>
+              <div key={v.id} className="bg-white dark:bg-slate-700/30 rounded-xl border-2 border-slate-200 dark:border-slate-600 p-4 hover:border-brand-400 hover:shadow-md transition-all">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-heading font-semibold mb-1">{v.legalPlateNo}</p>
+                    <p className="font-heading font-bold text-slate-900 dark:text-white text-sm">{v.id}</p>
+                  </div>
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
+                    v.status === VehicleStatus.ACTIVE ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                    v.status === VehicleStatus.UNDER_REPAIR ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
+                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                  }`}>
+                    {v.status}
+                  </span>
+                </div>
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-medium truncate">{v.makeModel}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{v.type}</p>
                 </div>
               </div>
             ))}

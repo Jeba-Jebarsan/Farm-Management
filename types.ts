@@ -149,6 +149,7 @@ export interface InventoryItem {
   id: string;
   itemName: string;
   inventoryNumber: string;
+  assetNumber: string;
   dateOfPurchase: string;
   value: number;
   revaluationRate: number;

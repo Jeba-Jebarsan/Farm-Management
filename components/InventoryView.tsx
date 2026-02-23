@@ -17,6 +17,7 @@ const emptyItem = (): InventoryItem => ({
   id: '',
   itemName: '',
   inventoryNumber: '',
+  assetNumber: '',
   dateOfPurchase: new Date().toISOString().split('T')[0],
   value: 0,
   revaluationRate: 0,
@@ -205,6 +206,16 @@ export default function InventoryView({ data, onAdd, onUpdate, onDelete, isAdmin
                 </div>
 
                 <div>
+                  <label className="label-gov">Asset Number</label>
+                  <input
+                    className="input-gov w-full px-4 py-3"
+                    placeholder="e.g. AST-001"
+                    value={editForm.assetNumber}
+                    onChange={e => setEditForm({ ...editForm, assetNumber: e.target.value })}
+                  />
+                </div>
+
+                <div>
                   <label className="label-gov">Category *</label>
                   <select
                     className="input-gov w-full px-4 py-3"
@@ -312,6 +323,7 @@ export default function InventoryView({ data, onAdd, onUpdate, onDelete, isAdmin
               <thead>
                 <tr>
                   <th className="px-3 md:px-6 py-3 md:py-4 text-left">Inventory No.</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left">Asset No.</th>
                   <th className="px-3 md:px-6 py-3 md:py-4 text-left">Item Name</th>
                   <th className="px-3 md:px-6 py-3 md:py-4 text-left">Category</th>
                   <th className="px-3 md:px-6 py-3 md:py-4 text-left">Purchase Date</th>
@@ -325,7 +337,7 @@ export default function InventoryView({ data, onAdd, onUpdate, onDelete, isAdmin
               <tbody>
                 {filteredData.length === 0 ? (
                   <tr>
-                    <td colSpan={isAdmin ? 9 : 8} className="px-3 md:px-6 py-12 text-center text-gray-500">
+                    <td colSpan={isAdmin ? 10 : 9} className="px-3 md:px-6 py-12 text-center text-gray-500">
                       No inventory items found.
                     </td>
                   </tr>
@@ -335,6 +347,7 @@ export default function InventoryView({ data, onAdd, onUpdate, onDelete, isAdmin
                     .map(item => (
                       <tr key={item.id} className="hover:bg-brand-50/50 transition-colors">
                         <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-brand-700">{item.inventoryNumber}</td>
+                        <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-600">{item.assetNumber || '—'}</td>
                         <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-900">{item.itemName}</td>
                         <td className="px-3 md:px-6 py-3 md:py-4">
                           <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">

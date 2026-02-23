@@ -274,6 +274,7 @@ CREATE TABLE inventory_items (
   id TEXT PRIMARY KEY,
   item_name TEXT NOT NULL,
   inventory_number TEXT NOT NULL UNIQUE,
+  asset_number TEXT NOT NULL DEFAULT '',
   date_of_purchase TEXT NOT NULL,
   value REAL NOT NULL DEFAULT 0,
   revaluation_rate REAL NOT NULL DEFAULT 0,

@@ -58,6 +58,11 @@ const toSnake = (obj: Record<string, any>): Record<string, any> => {
     kmEnd: 'km_end',
     fuelUsed: 'fuel_used',
     renewalDate: 'renewal_date',
+    inventoryNumber: 'inventory_number',
+    dateOfPurchase: 'date_of_purchase',
+    revaluationRate: 'revaluation_rate',
+    assetNumber: 'asset_number',
+    itemName: 'item_name',
   };
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(obj)) {
@@ -106,6 +111,8 @@ const toCamel = (obj: Record<string, any>): Record<string, any> => {
     inventory_number: 'inventoryNumber',
     date_of_purchase: 'dateOfPurchase',
     revaluation_rate: 'revaluationRate',
+    asset_number: 'assetNumber',
+    item_name: 'itemName',
   };
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(obj)) {
